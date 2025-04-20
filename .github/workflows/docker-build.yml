@@ -1,0 +1,25 @@
+name: Build and Zip Docker Image
+
+on:
+  push:
+    branches: [ main ]  
+  workflow_dispatch:    
+
+jobs:
+  build-and-zip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Build Docker image
+        run: docker build -f DOCKERFILE -t flask-crud-app .
+
+      - name: Save Docker image as tar
+        run: docker save flask-crud-app -o flask-crud-app.tar
+
+      - name: Zip the image tarball
+        run: zip flask-crud-app.zip flask-crud-app.tar
+
+#TODO push to acr
