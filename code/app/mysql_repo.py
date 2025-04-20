@@ -1,19 +1,23 @@
 # app/mysql_repo.py
 from app.repository import EmployeeRepository
-import pymysql
+
 
 class MySQLRepo(EmployeeRepository):
     def __init__(self, config):
         self.config = config
 
     def _get_conn(self):
-        return pymysql.connect(
-            host=self.config['host'],
-            user=self.config['user'],
-            password=self.config['password'],
-            database=self.config['database']
-        )
-
+        try:
+            import pymysql
+            return pymysql.connect(
+                host=self.config['host'],
+                user=self.config['user'],
+                password=self.config['password'],
+                database=self.config['database']
+            )
+        except e:
+            return None
+            
     def get_all(self):
         conn = self._get_conn()
         cursor = conn.cursor()
